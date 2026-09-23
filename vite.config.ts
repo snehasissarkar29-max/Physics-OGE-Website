@@ -4,12 +4,8 @@ import path from 'path';
 import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
-  // Use './' for relative asset paths so it works seamlessly on GitHub Pages (both project pages and custom domains)
-  // or use VITE_BASE_PATH if explicitly supplied
-  const basePath = process.env.VITE_BASE_PATH || (process.env.GITHUB_REPOSITORY ? `/${process.env.GITHUB_REPOSITORY.split('/')[1]}/` : './');
-
   return {
-    base: basePath,
+    base: './',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
