@@ -4,16 +4,22 @@ import path from 'path';
 import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
-  // If deployed on GitHub Pages via Actions or environment, GITHUB_REPOSITORY is often "owner/repo-name"
-  const repoName = process.env.GITHUB_REPOSITORY ? `/${process.env.GITHUB_REPOSITORY.split('/')[1]}/` : './';
+  // Use './' for relative asset paths so it works seamlessly on GitHub Pages (both project pages and custom domains)
+  // or use VITE_BASE_PATH if explicitly supplied
+  const basePath = process.env.VITE_BASE_PATH || (process.env.GITHUB_REPOSITORY ? `/${process.env.GITHUB_REPOSITORY.split('/')[1]}/` : './');
 
   return {
-    base: process.env.VITE_BASE_PATH || repoName,
+    base: basePath,
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
       },
+    },
+    build: {
+      outDir: 'dist',
+      assetsDir: 'assets',
+      sourcemap: false,
     },
     server: {
       // HMR is disabled in AI Studio via DISABLE_HMR env var.
